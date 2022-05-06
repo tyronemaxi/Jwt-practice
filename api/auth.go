@@ -11,6 +11,10 @@ type UserInfo struct {
 	Password string `json:"password"`
 }
 
+func UserRegister(c *gin.Context) {
+
+}
+
 func UserAuth(c *gin.Context) {
 	var token string
 	var err error
