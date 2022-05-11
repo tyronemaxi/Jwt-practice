@@ -7,7 +7,7 @@ const (
 )
 
 var (
-	// server flags
+	// service flags
 	HealthPort int
 	ListenPort int
 	RunMode    string
@@ -32,11 +32,11 @@ var (
 
 func init() {
 	// db flags
-	flag.StringVar(&DBHost, "db-host", "", "db host")
+	flag.StringVar(&DBHost, "db-host", "192.168.1.18", "db host")
 	flag.IntVar(&DBPort, "db-port", 3306, "db port")
-	flag.StringVar(&DBUser, "db-user", "", "db user")
-	flag.StringVar(&DBPassword, "db-password", "", "db password")
-	flag.StringVar(&DBDatabase, "db-database", "", "db database")
+	flag.StringVar(&DBUser, "db-user", "root", "db user")
+	flag.StringVar(&DBPassword, "db-password", "123456", "db password")
+	flag.StringVar(&DBDatabase, "db-database", "beta", "db database")
 	flag.StringVar(&DBDriver, "db-driver", MysqlDriver, "db driver")
 	flag.IntVar(&DBConnectTimeoutInSeconds, "db-conn-timeout", 30, "db connect time out in seconds")
 	flag.IntVar(&PGIdleTransactionTimeout, "pg-idle-in-transaction-session-timeout", 30000, "pg idle transaction session time out in millisecond")
@@ -50,7 +50,7 @@ func init() {
 		"db max open connection")
 	flag.IntVar(&DBMaxIdleConn, "db-max-idle-conn", 5,
 		"db max idle connection")
-	flag.BoolVar(&DBDebugMode, "gorm-debug-mode", false,
+	flag.BoolVar(&DBDebugMode, "gorm-debug-mode", true,
 		"debug sql switch")
 	flag.BoolVar(&LocalDebug, "local-debug-mode", false,
 		"local debug switch")

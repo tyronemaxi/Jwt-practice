@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"jwt-practice/api"
+	"jwt-practice/api/user"
 	"jwt-practice/middleware"
 )
 
@@ -13,11 +14,12 @@ func InitRouter() {
 	// user auth
 	auth := router.Group("/user")
 	{
-		auth.POST("/auth", api.UserAuth)
+		auth.POST("/register", user.UserRegister)
+		//auth.POST("/auth", api.UserAuth)
 	}
 	// v1
 	apiV1 := router.Group("/api/v1")
-	apiV1.Use(middleware.JwtAuth())
+	apiV1.Use(middleware.JwtAuth(), middleware.ErrorHandler())
 	{
 		apiV1.GET("/home", api.GetHome)
 	}
