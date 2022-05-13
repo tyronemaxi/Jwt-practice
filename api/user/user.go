@@ -3,13 +3,14 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-
+	"jwt-practice/api"
 	req "jwt-practice/api/request"
 	"jwt-practice/api/response"
 	"jwt-practice/service"
+	"jwt-practice/util"
 )
 
-func UserRegister(c *gin.Context) {
+func Register(c *gin.Context) {
 	var userReq *req.UserInfoRequest
 
 	if err := c.ShouldBindJSON(&userReq); err != nil {
@@ -19,10 +20,10 @@ func UserRegister(c *gin.Context) {
 
 	// check username is not exits
 	userService := service.NewUserService()
-	userCount, err := userService.GetUser(userReq.Username)
+	userCount, err := userService.GetUserCount(userReq.Username)
 	if userCount > 0 {
 		logrus.Errorf("用户名：[%s] 已存在， 请修改", userReq.Username)
-		response.Fail(c, "用户名已存在，请修改")
+		response.Fail(c, "用户名已存在，请重新输入")
 		return
 	}
 
@@ -63,34 +64,29 @@ func UserRegister(c *gin.Context) {
 
 }
 
-//func UserAuth(c *gin.Context) {
-//	var token string
-//	var err error
-//
-//	username, password := c.PostForm("username"), c.PostForm("password")
-//
-//	// step1: check the user exits
-//
-//	// step2: check the user password and username
-//	if username == testUser.Username && password == testUser.Password {
-//		token, err = util.GenerateJwtToken(username, password)
-//		if err != nil {
-//			c.JSON(http.StatusForbidden, gin.H{
-//				"code": http.StatusForbidden,
-//				"msg":  TokenGenerateFail,
-//				"data": gin.H{
-//					"token": nil,
-//				},
-//			})
-//			return
-//		}
-//	}
-//
-//	c.JSON(http.StatusOK, gin.H{
-//		"code": http.StatusOK,
-//		"msg":  "success",
-//		"data": gin.H{
-//			"token": token,
-//		},
-//	})
-//}
+func Auth(c *gin.Context) {
+	var err error
+	var token string
+	username, password := c.PostForm("username"), c.PostForm("password")
+
+	userService := service.NewUserService()
+	user, err := userService.GetUserInfo(username); if err != nil {
+		logrus.Errorf("用户名：[%s] 不存在， 请重新输入",username)
+		response.Fail(c, "用户名不存在， 请重新输入")
+		return
+	}
+
+	if util.ComparePasswords(user.Password, password) {
+		token, err = util.GenerateJwtToken(username, password)
+		if err != nil {
+			response.Fail(c, api.TokenGenerateFail)
+			return
+		}
+	} else {
+		logrus.Errorf("用户密码：%s 错误", password)
+		response.Fail(c, "用户密码错误，请重新输入")
+		return
+	}
+
+	response.Success(c, token)
+}

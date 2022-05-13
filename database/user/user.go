@@ -42,19 +42,19 @@ func (u *User) TableName() string {
 	return UserTableName
 }
 
-func (p *UserDao) CreateUser(u User) error {
-	db := p.GetDB()
-	db = db.Create(&u)
-
-	return db.Error
-}
-
 func (p *UserDao) getListQuery(q *gorm.DB, filter UsernameFilter) *gorm.DB {
 	if len(filter.UserName) > 0 {
 		q = q.Where("username in (?)", filter.UserName)
 	}
 
 	return q
+}
+
+func (p *UserDao) CreateUser(u User) error {
+	db := p.GetDB()
+	db = db.Create(&u)
+
+	return db.Error
 }
 
 func (p *UserDao) GetUserCount(filter UsernameFilter) (int, error) {
@@ -74,9 +74,14 @@ func (p *UserDao) GetUserCount(filter UsernameFilter) (int, error) {
 	return int(num), q.Error
 }
 
-//func (p *UserDao) UserList(u *User) error {
-//
-//}
+func (p *UserDao) GetUser(username string) (*User, error) {
+	q := p.GetDB()
+	res := &User{}
+
+	q = q.Where("username", username).First(&res)
+
+	return res, q.Error
+}
 
 func NewUserDao() *UserDao {
 	return &UserDao{

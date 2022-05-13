@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 	"strconv"
 	"time"
 )
@@ -84,4 +85,25 @@ func UUIDToShortID(UUID string) string {
 		result = append(result, SHORTID_DIGITS[index%34])
 	}
 	return string(result)
+}
+
+func HashAndSalt(pwdStr string) (pwdHash string, err error) {
+	pwd := []byte(pwdStr)
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		return
+	}
+	pwdHash = string(hash)
+	return
+}
+
+// 验证密码
+func ComparePasswords(hashedPwd string, plainPwd string) bool {
+	byteHash := []byte(hashedPwd)
+	bytePwd := []byte(plainPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, bytePwd)
+	if err != nil {
+		return false
+	}
+	return true
 }

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"jwt-practice/api/request"
 	"jwt-practice/database/user"
 	"jwt-practice/util"
@@ -36,8 +35,7 @@ func (u *UserService) CreateUser(userOpt CreateUserOption) error {
 	// 别名不唯一
 
 	// 用户名密码 brcypt 加密
-	pwd := []byte(userOpt.UserInfo.Password)
-	secretPasswd, err := bcrypt.GenerateFromPassword(pwd, 10)
+	secretPasswd, err := util.HashAndSalt(userOpt.UserInfo.Password)
 	if err != nil {
 		return err
 	}
@@ -72,7 +70,7 @@ func (u *UserService) CreateUser(userOpt CreateUserOption) error {
 	return nil
 }
 
-func (u *UserService) GetUser(username string) (int, error) {
+func (u *UserService) GetUserCount(username string) (int, error) {
 	userDao := user.NewUserDao()
 
 	userCount, err := userDao.GetUserCount(user.UsernameFilter{
@@ -80,6 +78,16 @@ func (u *UserService) GetUser(username string) (int, error) {
 	})
 
 	return userCount, err
+}
+
+func (u *UserService) GetUserInfo(username string) (*user.User, error) {
+	userDao := user.NewUserDao()
+
+	userInfo, err := userDao.GetUser(username); if err != nil {
+		return userInfo, err
+	}
+
+	return userInfo, nil
 }
 
 func NewUserService() *UserService {

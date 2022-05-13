@@ -21,11 +21,12 @@ func TestUserRegistered_UserRegisterValidateMatch(t *testing.T) {
 	}
 
 	userValidate := NewUserAuthValidate()
-	err = userValidate.UserRegisterValidateMatch(a)
+	err = userValidate.UserRegisterValidate(a)
 	if err != nil {
 		t.Errorf("validate err: [%s]", err.Error())
 	}
-	err = userValidate.UserRegisterValidateMatch(b)
+
+	err = userValidate.UserRegisterValidate(b)
 	if err != nil {
 		t.Errorf("validate err: [%s]", err.Error())
 	}

@@ -14,8 +14,8 @@ func InitRouter() {
 	// user auth
 	auth := router.Group("/user")
 	{
-		auth.POST("/register", user.UserRegister)
-		//auth.POST("/auth", api.UserAuth)
+		auth.POST("/register", user.Register)
+		auth.POST("/auth", user.Auth)
 	}
 	// v1
 	apiV1 := router.Group("/api/v1")
