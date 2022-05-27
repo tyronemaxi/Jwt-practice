@@ -6,7 +6,7 @@ import (
 	"jwt-practice/api"
 	req "jwt-practice/api/request"
 	"jwt-practice/api/response"
-	"jwt-practice/service"
+	"jwt-practice/service/user"
 	"jwt-practice/util"
 )
 
@@ -19,7 +19,7 @@ func Register(c *gin.Context) {
 	}
 
 	// check username is not exits
-	userService := service.NewUserService()
+	userService := user.NewUserService()
 	userCount, err := userService.GetUserCount(userReq.Username)
 	if userCount > 0 {
 		logrus.Errorf("用户名：[%s] 已存在， 请修改", userReq.Username)
@@ -50,7 +50,8 @@ func Register(c *gin.Context) {
 
 	logrus.Infof("Create the new user: %s", userReq.Username)
 
-	userInfo := service.CreateUserOption{
+
+	userInfo := user.CreateUserOption{
 		UserInfo: userReq,
 	}
 
@@ -59,6 +60,8 @@ func Register(c *gin.Context) {
 		response.Fail(c, err.Error())
 		return
 	}
+
+	// 验证邮箱或者手机号
 
 	response.Success(c, nil)
 
@@ -69,7 +72,7 @@ func Auth(c *gin.Context) {
 	var token string
 	username, password := c.PostForm("username"), c.PostForm("password")
 
-	userService := service.NewUserService()
+	userService := user.NewUserService()
 	user, err := userService.GetUserInfo(username); if err != nil {
 		logrus.Errorf("用户名：[%s] 不存在， 请重新输入",username)
 		response.Fail(c, "用户名不存在， 请重新输入")
@@ -90,3 +93,43 @@ func Auth(c *gin.Context) {
 
 	response.Success(c, token)
 }
+
+//
+//func VerifyMobile(c *gin.Context) {
+//
+//}
+//
+//func VerifyEmail(c *gin.Context) {
+//	var emailTocken string
+//	var err error
+//	var emailMsg *req.UserEmailVerify
+//
+//	if err := c.ShouldBindJSON(&emailMsg); err != nil {
+//		response.Fail(c, err.Error())
+//		return
+//	}
+//
+//
+//	// 解析 user 信息
+//
+//	// 查询用户信息 uid
+//
+//	// 根据 uid, email, 生成 uid
+//
+//	if util.ComparePasswords(emailMsg.Email,  ) {
+//		emailTocken, err = util.GenerateJwtToken(username, password)
+//		if err != nil {
+//			response.Fail(c, api.TokenGenerateFail)
+//			return
+//		}
+//	} else {
+//		logrus.Errorf("用户密码：%s 错误", password)
+//		response.Fail(c, "用户密码错误，请重新输入")
+//		return
+//	}
+
+
+
+
+
+//}

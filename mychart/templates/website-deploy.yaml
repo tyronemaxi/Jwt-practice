@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+        - name: website
+          securityContext:
+            privileged: true
+          image: 'tyrone1996/website:1.0.1'
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 0.25
+              memory: 0.25Gi
+            limits:
+              cpu: 0.5
+              memory: 0.5Gi
+          command: ["/bin/sh", "-c", "/usr/local/bin/server"]
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

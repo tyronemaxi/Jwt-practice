@@ -1,4 +1,4 @@
-FROM golang:1.18.1-alpine3.15 as builder
+FROM golang:1.18.1-alpine3.15 as base
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -8,16 +8,13 @@ ENV GO111MODULE=on \
 
 WORKDIR /app
 
-COPY . .
+COPY . $WORKDIR
 
-RUN go mod tidy && GOOS=linux GOARCH=amd64 go build -o server main.go
+RUN go mod tidy && go build -o server main.go
 
-## 二级构建
-FROM scratch as final
-COPY --from=builder /app/server /
+FROM alpine:3.13.0
+ENV TZ "Asia/Shanghai"
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk update && apk add --no-cache tzdata
 
-EXPOSE 8080
-
-CMD ["/server"]
-
-
+COPY --from=base /app/server /usr/local/bin/

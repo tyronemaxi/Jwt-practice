@@ -7,10 +7,18 @@ import (
 )
 
 type UserInfoRequest struct {
-	Username    string `json:"username" binding:"required"`
-	Password    string `json:"password" binding:"required"`
-	MobilePhone string `json:"mobile_phone" binding:"required"`
-	Email       string `json:"email" binding:"required"`
+	Username       string `json:"username" binding:"required"`
+	Password       string `json:"password" binding:"required"`
+	MobilePhone    string `json:"mobile_phone" binding:"required"`
+	MobileVerified int    `json:"mobile_verified"`
+	Email          string `json:"email" binding:"required"`
+	EmailVerified  int    `json:"email_verified"`
+}
+
+type UserEmailVerify struct {
+	Email        string `json:"email" binding:"required"`
+	SendIfExits  bool   `json:"send_if_exits" binding:"required"`
+	UserMsgToken string `json:"user_token" binding:"requeired"`
 }
 
 const (
@@ -50,7 +58,7 @@ func (u *UserInfoRequest) UserRegisterValidate(userInfo map[string]string) error
 	}
 
 	for userFiled, userValue := range userInfo {
-		logrus.Infof("validate the UserRegister option key:[%s], value:[%s]", userFiled, userValue )
+		logrus.Infof("validate the UserRegister option key:[%s], value:[%s]", userFiled, userValue)
 		for k, v := range reRule {
 			if k == userFiled {
 				if !v.MatchString(userValue) {

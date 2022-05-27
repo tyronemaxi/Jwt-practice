@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: website
+  labels:
+    app: website
+spec:
+  type: NodePort
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: listen
+      port: 8080
+      targetPort: 8080
+      nodePort: 8080
+      protocol: TCP
+
+  selector:
+    app: website

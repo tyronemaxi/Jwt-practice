@@ -11,11 +11,12 @@ func InitRouter() {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	// user auth
 	auth := router.Group("/user")
 	{
 		auth.POST("/register", user.Register)
 		auth.POST("/auth", user.Auth)
+		//auth.PUT("/emailVerification", user.VerifyEmail)
+
 	}
 	// v1
 	apiV1 := router.Group("/api/v1")

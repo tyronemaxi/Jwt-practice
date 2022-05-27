@@ -51,3 +51,5 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8 COMMENT ='用户信息表'
 ```
 
+# 用户邮箱验证
+> description: 用户输入邮箱
