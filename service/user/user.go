@@ -2,9 +2,9 @@ package user
 
 import (
 	"gopkg.in/gomail.v2"
-	"jwt-practice/api/request"
-	"jwt-practice/database/user"
-	"jwt-practice/util"
+	"website/api/request"
+	"website/database/user"
+	"website/util"
 )
 
 const (

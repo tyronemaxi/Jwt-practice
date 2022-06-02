@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 
-	"jwt-practice/util"
+	"website/util"
 )
 
 func JwtAuth() gin.HandlerFunc{

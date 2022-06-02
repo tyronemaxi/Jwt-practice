@@ -3,11 +3,11 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"jwt-practice/api"
-	req "jwt-practice/api/request"
-	"jwt-practice/api/response"
-	"jwt-practice/service/user"
-	"jwt-practice/util"
+	"website/api"
+	req "website/api/request"
+	"website/api/response"
+	"website/service/user"
+	"website/util"
 )
 
 func Register(c *gin.Context) {

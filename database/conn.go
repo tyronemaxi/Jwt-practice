@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"jwt-practice/util/flag"
+	"website/util/flag"
 )
 
 const (

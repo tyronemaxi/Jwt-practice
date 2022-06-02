@@ -4,11 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"jwt-practice/database"
-	"jwt-practice/router"
+	"website/database"
+	"website/router"
 )
 
-func main()  {
+func main() {
 	flag.Parsed()
 
 	err := database.Init()

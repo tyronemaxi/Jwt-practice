@@ -2,8 +2,8 @@ package user
 
 import (
 	"gorm.io/gorm"
-	"jwt-practice/database"
 	"time"
+	"website/database"
 )
 
 const (
