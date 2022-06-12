@@ -10,7 +10,7 @@ import (
 func InitRouter() {
 	gin.SetMode(gin.ReleaseMode)
 
-	router := gin.Default()
+	router := gin.New()
 	auth := router.Group("/user")
 	{
 		auth.POST("/register", user.Register)
@@ -22,7 +22,7 @@ func InitRouter() {
 	apiV1 := router.Group("/api/v1")
 	apiV1.Use(middleware.JwtAuth(), middleware.ErrorHandler())
 
-	apiV1.Use(api.JwtAuth())
+	apiV1.Use(middleware.JwtAuth())
 
 	{
 		apiV1.GET("/home", api.GetHome)

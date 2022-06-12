@@ -32,7 +32,7 @@ var (
 
 func init() {
 	// db flags
-	flag.StringVar(&DBHost, "db-host", "192.168.1.18", "db host")
+	flag.StringVar(&DBHost, "db-host", "192.168.14.107", "db host")
 	flag.IntVar(&DBPort, "db-port", 3306, "db port")
 	flag.StringVar(&DBUser, "db-user", "root", "db user")
 	flag.StringVar(&DBPassword, "db-password", "123456", "db password")
